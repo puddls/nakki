@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame, QGridLayout, QLabel, QPushButton, QLCDNumber, QListWidget, QListWidgetItem, QLineEdit
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame, QGridLayout, QLabel, QPushButton, QLCDNumber, QListWidget, QListWidgetItem, QLineEdit, QComboBox
 from PyQt5.QtGui import QPalette, QColor
-
+from PyQt5.QtCore import Qt
 
 class MainWindow(QFrame):
 
@@ -9,6 +9,20 @@ class MainWindow(QFrame):
 
 
         layout = QGridLayout()
+        action_drop = QComboBox()
+        action_drop.addItem("Close")
+        action_drop.addItem("Open")
+        object_drop = QComboBox()
+        object_drop.addItem("Discord")
+        object_drop.addItem("Spotify")
+        cond_drop = QComboBox()
+        cond_drop.addItem("9 AM")
+        cond_drop.addItem("2 PM")
+        layout.addWidget(action_drop, 1, 1, 1, 1)
+        layout.addWidget(object_drop, 1, 2, 1, 1)
+        layout.addWidget(cond_drop, 1, 3, 1, 1)
+
+        self.setLayout(layout)
 
 
 app = QApplication([])
