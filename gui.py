@@ -12,15 +12,26 @@ class MainWindow(QFrame):
         action_drop = QComboBox()
         action_drop.addItem("Close")
         action_drop.addItem("Open")
+        action_create = QPushButton("+")
+
         object_drop = QComboBox()
         object_drop.addItem("Discord")
         object_drop.addItem("Spotify")
+        object_create = QPushButton("+")
+
         cond_drop = QComboBox()
         cond_drop.addItem("9 AM")
         cond_drop.addItem("2 PM")
-        layout.addWidget(action_drop, 1, 1, 1, 1)
-        layout.addWidget(object_drop, 1, 2, 1, 1)
-        layout.addWidget(cond_drop, 1, 3, 1, 1)
+        cond_create = QPushButton("+")
+
+        layout.addWidget(action_drop, 1, 1, 1, 3)
+        layout.addWidget(action_create, 1, 4, 1, 1)
+        
+        layout.addWidget(object_drop, 1, 5, 1, 3)
+        layout.addWidget(object_create, 1, 8, 1, 1)
+
+        layout.addWidget(cond_drop, 1, 9, 1, 3)
+        layout.addWidget(cond_create, 1, 12, 1, 1)
 
         self.setLayout(layout)
 
