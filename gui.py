@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame, QGridLayout, QLabel, QPushButton, QLCDNumber, QListWidget, QListWidgetItem, QLineEdit, QComboBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame, QGridLayout, QLabel, QPushButton, QLCDNumber, QListWidget, QListWidgetItem, QLineEdit, QComboBox, QDockWidget, QTabWidget, QToolBox
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtCore import Qt
 
@@ -24,6 +24,18 @@ class MainWindow(QFrame):
         self.cond_drop.addItem("2 PM")
         cond_create = QPushButton("+")
 
+        self.toolbox = QToolBox()
+        self.toolbox.addItem(self.action_drop, "action")
+        self.toolbox.addItem(self.object_drop, "object")
+        self.toolbox.addItem(self.cond_drop, "cond")
+        self.comm_list = QListWidget()
+        self.welcome = QPushButton("welcome")
+
+        self.tab = QTabWidget()
+        self.tab.addTab(self.toolbox, "Actions")
+        self.tab.addTab(self.comm_list, "Commited")
+        self.tab.setTabEnabled(1, 1)
+
         self.theme_button = QPushButton("Dark Mode")
 
         action_create.clicked.connect(self.create_action_block)
@@ -42,6 +54,7 @@ class MainWindow(QFrame):
         layout.addWidget(cond_create, 1, 12, 1, 1)
 
         layout.addWidget(self.theme_button,2,1,1,1)
+        layout.addWidget(self.tab)
 
         self.setLayout(layout)
 
