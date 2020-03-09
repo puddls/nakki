@@ -59,7 +59,7 @@ class MainWindow(QFrame):
             app.setPalette(dark_mode)
             self.theme_button.setText("Light Mode")
         else:
-            app.setPalette(standardPalette())
+            app.setPalette(app.style().standardPalette())
             self.theme_button.setText("Dark Mode")
 
 
@@ -73,7 +73,7 @@ window = MainWindow()
 window.resize(600, 750)
 window.show()
 
-# set dark theme
+# dark theme
 # from https://stackoverflow.com/a/56851493/12164878
 dark_mode = QPalette()
 dark_mode.setColor(QPalette.Window, QColor(53, 53, 53))
