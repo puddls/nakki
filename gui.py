@@ -8,17 +8,15 @@ class MainWindow(QFrame):
         super().__init__()
 
         self.comm_list = QListWidget()
-
         self.tabs = QTabWidget()
+
         create_page = CreateTaskPage()
         self.tabs.addTab(create_page, "Actions")
         self.tabs.addTab(self.comm_list, "Committed") # This is just an example right now
         # Need to implement task list class
 
         layout = QGridLayout()
-
         layout.addWidget(self.tabs)
-
         self.setLayout(layout)
 
 
