@@ -1,6 +1,7 @@
 import os
 import subprocess
 import sys
+import re
 
 from getpass import getuser
 
@@ -35,15 +36,40 @@ class LinuxController:
         print('closing {} on linux'.format(str(application)))
 
     def get_applications(self):
-        desktop_entries = []
-        for loc in ('/usr/share/applications',
-                    '/usr/local/share/applications',
-                    f'/home/{getuser()}/.local/share/applications'):
+        desktop_entries = set()
+        for loc in ('/usr/share/applications/',
+                    '/usr/local/share/applications/',
+                    f'/home/{getuser()}/.local/share/applications/'):
             try:
-                desktop_entries += os.listdir(loc)
+                desktop_entries.update(map(lambda x: loc + x, os.listdir(loc)))
             except FileNotFoundError:
                 pass
-        return list(map(lambda x:x.strip('.desktop'), desktop_entries))
+        return set(map(self.parse_desktop_entry, desktop_entries))
+    
+    def parse_desktop_entry(self, file):
+        if '.desktop' in file:
+            f = open(file).read()
+            start = re.search(r'\[Desktop Entry\]', f)
+            if start:
+                s = start.span()[1]
+                end = re.search(r'\n\[.*\]', f[s:])
+                if end:
+                    e = end.span()[0]
+                else:
+                    e = None
+                entry = f[s:e]
+                name = None
+                exec_ = None
+                for line in entry.split('\n'):
+                    if 'Name=' in line:
+                        name = line.split('=')[1]
+                    elif 'Exec=' in line:
+                        exec_ = line.split('=')[1]
+                    elif 'Type=' in line:
+                        if not 'Application' in line:
+                            return None
+                return (name, exec_)
+        return None
 
 
 class MacController:
