@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame, QGridLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, QLineEdit, QComboBox, QTabWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame, QGridLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, QLineEdit, QComboBox, QTabWidget, QScrollArea
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtCore import Qt
 
@@ -15,16 +15,16 @@ class MainWindow(QFrame):
         self.tabs.addTab(settings, "Settings")
         # Need to implement task list class
 
-        layout = QGridLayout()
-        layout.addWidget(self.tabs)
-        self.setLayout(layout)
+        self.layout = QGridLayout()
+        self.layout.addWidget(self.tabs)
+        self.setLayout(self.layout)
 
 class CreateTaskPage(QFrame):
 
     def __init__(self):
         super().__init__()
 
-        layout = QGridLayout()
+        self.layout = QGridLayout()
 
         buttons = ConstructionButtons()
         name_box = QLineEdit();
@@ -33,11 +33,14 @@ class CreateTaskPage(QFrame):
         save = QPushButton("Save")
         save.clicked.connect(self.save_task)
 
-        layout.addWidget(buttons)
-        layout.addWidget(name_box)
-        layout.addWidget(save)
+        create_box = CreationZone()
 
-        self.setLayout(layout)
+        self.layout.addWidget(buttons)
+        self.layout.addWidget(create_box)
+        self.layout.addWidget(name_box)
+        self.layout.addWidget(save)
+
+        self.setLayout(self.layout)
 
     def save_task(self):
         print("no work")
@@ -46,7 +49,7 @@ class ConstructionButtons(QFrame):
     def __init__(self):
         super().__init__()
 
-        layout = QGridLayout()
+        self.layout = QGridLayout()
 
         self.action_drop = QComboBox()
         self.action_drop.addItem("Close")
@@ -67,16 +70,16 @@ class ConstructionButtons(QFrame):
         object_create.clicked.connect(self.create_object_block)
         cond_create.clicked.connect(self.create_cond_block)
 
-        layout.addWidget(self.action_drop, 1, 1, 1, 3)
-        layout.addWidget(action_create, 1, 4, 1, 1)
+        self.layout.addWidget(self.action_drop, 1, 1, 1, 3)
+        self.layout.addWidget(action_create, 1, 4, 1, 1)
 
-        layout.addWidget(self.object_drop, 1, 5, 1, 3)
-        layout.addWidget(object_create, 1, 8, 1, 1)
+        self.layout.addWidget(self.object_drop, 1, 5, 1, 3)
+        self.layout.addWidget(object_create, 1, 8, 1, 1)
 
-        layout.addWidget(self.cond_drop, 1, 9, 1, 3)
-        layout.addWidget(cond_create, 1, 12, 1, 1)
+        self.layout.addWidget(self.cond_drop, 1, 9, 1, 3)
+        self.layout.addWidget(cond_create, 1, 12, 1, 1)
 
-        self.setLayout(layout)
+        self.setLayout(self.layout)
 
     def create_action_block(self):
         print("no work")
@@ -87,6 +90,14 @@ class ConstructionButtons(QFrame):
     def create_cond_block(self):
         print("no work")
 
+class CreationZone(QScrollArea):
+    def __init__(self):
+        super().__init__()
+
+        self.layout = QGridLayout()
+
+        self.setLayout(self.layout)
+
 class Settings(QFrame):
     def __init__(self):
         super().__init__()
@@ -94,11 +105,11 @@ class Settings(QFrame):
         self.theme_button = QPushButton("Dark Mode")
         self.theme_button.clicked.connect(self.theme_change)
 
-        layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
-        layout.addWidget(self.theme_button, 1, 1)
+        self.layout = QGridLayout()
+        self.layout.setAlignment(Qt.AlignTop)
+        self.layout.addWidget(self.theme_button, 1, 1)
 
-        self.setLayout(layout)
+        self.setLayout(self.layout)
 
     def theme_change(self):
         if self.theme_button.text() == "Dark Mode":
