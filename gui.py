@@ -25,6 +25,18 @@ class CreateTaskPage(QFrame):
         super().__init__()
 
         layout = QGridLayout()
+
+        buttons = ConstructionButtons()
+        layout.addWidget(buttons)
+
+        self.setLayout(layout)
+
+class ConstructionButtons(QFrame):
+    def __init__(self):
+        super().__init__()
+
+        layout = QGridLayout()
+
         self.action_drop = QComboBox()
         self.action_drop.addItem("Close")
         self.action_drop.addItem("Open")
