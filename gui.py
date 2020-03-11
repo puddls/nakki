@@ -15,12 +15,12 @@ class MainWindow(QFrame):
         self.tabs.addTab(self.comm_list, "Committed") # This is just an example right now
         # Need to implement task list class
 
-        self.tabs.setTabEnabled(1, 1)
         layout = QGridLayout()
 
         layout.addWidget(self.tabs)
 
         self.setLayout(layout)
+
 
 class CreateTaskPage(QFrame):
 
