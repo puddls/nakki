@@ -8,11 +8,12 @@ class MainWindow(QFrame):
         super().__init__()
 
         self.comm_list = QListWidget()
+        settings = Settings()
         self.tabs = QTabWidget()
 
         create_page = CreateTaskPage()
         self.tabs.addTab(create_page, "Actions")
-        self.tabs.addTab(self.comm_list, "Committed") # This is just an example right now
+        self.tabs.addTab(settings, "Settings") # This is just an example right now
         # Need to implement task list class
 
         layout = QGridLayout()
@@ -41,13 +42,9 @@ class CreateTaskPage(QFrame):
         self.cond_drop.addItem("2 PM")
         cond_create = QPushButton("+")
 
-        self.theme_button = QPushButton("Dark Mode")
-
         action_create.clicked.connect(self.create_action_block)
         object_create.clicked.connect(self.create_object_block)
         cond_create.clicked.connect(self.create_cond_block)
-
-        self.theme_button.clicked.connect(self.theme_change)
 
         layout.addWidget(self.action_drop, 1, 1, 1, 3)
         layout.addWidget(action_create, 1, 4, 1, 1)
@@ -57,8 +54,6 @@ class CreateTaskPage(QFrame):
 
         layout.addWidget(self.cond_drop, 1, 9, 1, 3)
         layout.addWidget(cond_create, 1, 12, 1, 1)
-
-        layout.addWidget(self.theme_button,2,1,1,1)
 
         self.setLayout(layout)
 
@@ -71,6 +66,20 @@ class CreateTaskPage(QFrame):
     def create_cond_block(self):
         print("no work")
 
+class Settings(QFrame):
+    def __init__(self):
+        super().__init__()
+
+        self.theme_button = QPushButton("Dark Mode")
+
+        layout = QGridLayout()
+        layo
+        layout.addWidget(self.theme_button, 1, 1)
+
+        self.theme_button.clicked.connect(self.theme_change)
+
+        self.setLayout(layout)
+
     def theme_change(self):
         if self.theme_button.text() == "Dark Mode":
             app.setPalette(dark_mode)
@@ -78,7 +87,6 @@ class CreateTaskPage(QFrame):
         else:
             app.setPalette(app.style().standardPalette())
             self.theme_button.setText("Dark Mode")
-
 
 app = QApplication([])
 app.setStyle("Fusion")
