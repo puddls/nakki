@@ -7,19 +7,17 @@ class MainWindow(QFrame):
     def __init__(self):
         super().__init__()
 
-        self.comm_list = QListWidget()
         settings = Settings()
-        self.tabs = QTabWidget()
-
         create_page = CreateTaskPage()
+
+        self.tabs = QTabWidget()
         self.tabs.addTab(create_page, "Actions")
-        self.tabs.addTab(settings, "Settings") # This is just an example right now
+        self.tabs.addTab(settings, "Settings")
         # Need to implement task list class
 
         layout = QGridLayout()
         layout.addWidget(self.tabs)
         self.setLayout(layout)
-
 
 class CreateTaskPage(QFrame):
 
