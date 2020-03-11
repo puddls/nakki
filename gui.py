@@ -27,9 +27,20 @@ class CreateTaskPage(QFrame):
         layout = QGridLayout()
 
         buttons = ConstructionButtons()
+        name_box = QLineEdit();
+        name_box.setPlaceholderText("Enter the name of your task here.")
+
+        save = QPushButton("Save")
+        save.clicked.connect(self.save_task)
+
         layout.addWidget(buttons)
+        layout.addWidget(name_box)
+        layout.addWidget(save)
 
         self.setLayout(layout)
+
+    def save_task(self):
+        print("no work")
 
 class ConstructionButtons(QFrame):
     def __init__(self):
