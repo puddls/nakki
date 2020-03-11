@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame, QGridLayout, QLabel, QPushButton, QLCDNumber, QListWidget, QListWidgetItem, QLineEdit, QComboBox, QDockWidget, QTabWidget, QToolBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame, QGridLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, QLineEdit, QComboBox, QTabWidget
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtCore import Qt
 
