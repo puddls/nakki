@@ -7,6 +7,25 @@ class MainWindow(QFrame):
     def __init__(self):
         super().__init__()
 
+        self.comm_list = QListWidget()
+
+        self.tabs = QTabWidget()
+        create_page = CreateTaskPage()
+        self.tabs.addTab(create_page, "Actions")
+        self.tabs.addTab(self.comm_list, "Committed") # This is just an example right now
+        # Need to implement task list class
+
+        self.tabs.setTabEnabled(1, 1)
+        layout = QGridLayout()
+
+        layout.addWidget(self.tabs)
+
+        self.setLayout(layout)
+
+class CreateTaskPage(QFrame):
+
+    def __init__(self):
+        super().__init__()
 
         layout = QGridLayout()
         self.action_drop = QComboBox()
@@ -23,18 +42,6 @@ class MainWindow(QFrame):
         self.cond_drop.addItem("9 AM")
         self.cond_drop.addItem("2 PM")
         cond_create = QPushButton("+")
-
-        self.toolbox = QToolBox()
-        self.toolbox.addItem(self.action_drop, "action")
-        self.toolbox.addItem(self.object_drop, "object")
-        self.toolbox.addItem(self.cond_drop, "cond")
-        self.comm_list = QListWidget()
-        self.welcome = QPushButton("welcome")
-
-        self.tab = QTabWidget()
-        self.tab.addTab(self.toolbox, "Actions")
-        self.tab.addTab(self.comm_list, "Commited")
-        self.tab.setTabEnabled(1, 1)
 
         self.theme_button = QPushButton("Dark Mode")
 
@@ -54,7 +61,6 @@ class MainWindow(QFrame):
         layout.addWidget(cond_create, 1, 12, 1, 1)
 
         layout.addWidget(self.theme_button,2,1,1,1)
-        layout.addWidget(self.tab)
 
         self.setLayout(layout)
 
@@ -74,8 +80,6 @@ class MainWindow(QFrame):
         else:
             app.setPalette(app.style().standardPalette())
             self.theme_button.setText("Dark Mode")
-
-
 
 
 app = QApplication([])
