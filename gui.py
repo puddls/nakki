@@ -20,6 +20,7 @@ class MainWindow(QFrame):
 
         self.setLayout(layout)
 
+
 class CreateTaskPage(QFrame):
 
     def __init__(self):
