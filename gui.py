@@ -71,12 +71,11 @@ class Settings(QFrame):
         super().__init__()
 
         self.theme_button = QPushButton("Dark Mode")
+        self.theme_button.clicked.connect(self.theme_change)
 
         layout = QGridLayout()
-        layo
+        layout.setAlignment(Qt.AlignTop)
         layout.addWidget(self.theme_button, 1, 1)
-
-        self.theme_button.clicked.connect(self.theme_change)
 
         self.setLayout(layout)
 
