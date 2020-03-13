@@ -2,6 +2,8 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame, QGridLayout, QLab
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtCore import Qt, pyqtSignal
 
+from systemctl.system_controller import systemController
+
 class MainWindow(QFrame):
 
     def __init__(self):
@@ -74,8 +76,12 @@ class ConstructionButtons(QFrame):
         self.action_create = QPushButton("+")
 
         self.object_drop = QComboBox()
-        self.object_drop.addItem("Discord", "Discord")
-        self.object_drop.addItem("Spotify", "Spotify")
+        apps = systemController.get_applications()
+        if apps:
+            for application in apps:
+                self.object_drop.addItem(application[0], application[0])
+        else:
+            self.object_drop.addItem("No apps found", "No apps found")
         self.object_create = QPushButton("+")
 
         self.cond_drop = QComboBox()

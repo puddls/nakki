@@ -18,10 +18,10 @@ class LinuxController:
                     '/usr/local/share/applications/',
                     f'/home/{getuser()}/.local/share/applications/'):
             try:
-                desktop_entries.update(map(lambda x: loc + x, os.listdir(loc)))
+                desktop_entries.update((loc + x for x in os.listdir(loc)))
             except FileNotFoundError:
                 pass
-        return set(map(parse_desktop_entry, desktop_entries))
+        return set(filter(None, map(parse_desktop_entry, desktop_entries)))
 
 
 

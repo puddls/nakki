@@ -12,3 +12,12 @@ class SystemController:
         if sys.platform == 'darwin':
             return MacController()
         return WindowsController()
+    
+    def close(self, application):
+        pass
+
+    def get_applications(self):
+        pass
+
+
+systemController = SystemController()
