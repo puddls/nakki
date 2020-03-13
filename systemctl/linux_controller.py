@@ -41,26 +41,26 @@ def continued_execute(cmd):
 
 
 def parse_desktop_entry(file):
-    if '.desktop' in file:
-        f = open(file).read()
-        start = re.search(r'\[Desktop Entry\]', f)
-        if start:
-            s = start.span()[1]
-            end = re.search(r'\n\[.*\]', f[s:])
-            if end:
-                e = end.span()[0]
-            else:
-                e = None
-            entry = f[s:e]
-            name = None
-            exec_ = None
-            for line in entry.split('\n'):
-                if 'Name=' in line:
-                    name = line.split('=')[1]
-                elif 'Exec=' in line:
-                    exec_ = line.split('=')[1]
-                elif 'Type=' in line:
-                    if not 'Application' in line:
-                        return None
-            return (name, exec_)
-    return None
+    if '.desktop' not in file:
+        return None
+    f = open(file).read()
+    start = re.search(r'\[Desktop Entry\]', f)
+    if start:
+        s = start.span()[1]
+        end = re.search(r'\n\[.*\]', f[s:])
+        if end:
+            e = end.span()[0]
+        else:
+            e = None
+        entry = f[s:e]
+        name = None
+        exec_ = None
+        for line in entry.split('\n'):
+            if 'Name=' in line:
+                name = line.split('=')[1]
+            elif 'Exec=' in line:
+                exec_ = line.split('=')[1]
+            elif 'Type=' in line:
+                if not 'Application' in line:
+                    return None
+        return (name, exec_)
