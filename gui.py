@@ -25,26 +25,24 @@ class CreateTaskPage(QFrame):
     def __init__(self):
         super().__init__()
 
-        self.layout = QGridLayout()
-
         self.buttons = ConstructionButtons()
-        name_box = QLineEdit();
+        self.buttons.action_create.clicked.connect(self.create_action_block)
+        self.buttons.object_create.clicked.connect(self.create_object_block)
+        self.buttons.cond_create.clicked.connect(self.create_cond_block)
+
+        self.creation_box = CreationZone()
+
+        name_box = QLineEdit()
         name_box.setPlaceholderText("Enter the name of your task here.")
 
         save = QPushButton("Save")
         save.clicked.connect(self.save_task)
 
-        self.create_box = CreationZone()
-
-        self.buttons.action_create.clicked.connect(self.create_action_block)
-        self.buttons.object_create.clicked.connect(self.create_object_block)
-        self.buttons.cond_create.clicked.connect(self.create_cond_block)
-
+        self.layout = QGridLayout()
         self.layout.addWidget(self.buttons)
-        self.layout.addWidget(self.create_box)
+        self.layout.addWidget(self.creation_box)
         self.layout.addWidget(name_box)
         self.layout.addWidget(save)
-
         self.setLayout(self.layout)
 
     def save_task(self):
@@ -52,15 +50,15 @@ class CreateTaskPage(QFrame):
 
     def create_action_block(self):
         new = ActionWidget(self.buttons.action_drop.currentData())
-        self.create_box.layout.addWidget(new)
+        self.creation_box.layout.addWidget(new)
 
     def create_object_block(self):
         new = ObjectWidget(self.buttons.object_drop.currentData())
-        self.create_box.layout.addWidget(new)
+        self.creation_box.layout.addWidget(new)
 
     def create_cond_block(self):
         new = CondWidget(self.buttons.cond_drop.currentData())
-        self.create_box.layout.addWidget(new)
+        self.creation_box.layout.addWidget(new)
 
 class ConstructionButtons(QFrame):
     def __init__(self):
@@ -100,7 +98,7 @@ class CreationZone(QScrollArea):
         super().__init__()
 
         self.layout = QGridLayout()
-
+        self.layout.setAlignment(Qt.AlignTop)
         self.setLayout(self.layout)
 
 class ActionWidget(QFrame):
