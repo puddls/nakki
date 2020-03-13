@@ -17,7 +17,6 @@ class MainWindow(QFrame):
         self.tabs.addTab(settings, "Settings")
         # Need to implement task list class
 
-
         self.layout = QGridLayout()
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
@@ -72,6 +71,7 @@ class ConstructionButtons(QFrame):
         self.action_drop.addItem("Close", "Close")
         self.action_drop.addItem("Open", "Open")
         self.action_create = QPushButton("+")
+        self.action_create.setStyleSheet("padding: 3px;")
 
         self.object_drop = QComboBox()
         apps = systemController.get_applications()
@@ -81,11 +81,13 @@ class ConstructionButtons(QFrame):
         else:
             self.object_drop.addItem("No apps found", "No apps found")
         self.object_create = QPushButton("+")
+        self.object_create.setStyleSheet("padding: 3px;")
 
         self.cond_drop = QComboBox()
         self.cond_drop.addItem("9 AM", "9 AM")
         self.cond_drop.addItem("2 PM", "2 PM")
         self.cond_create = QPushButton("+")
+        self.cond_create.setStyleSheet("padding: 3px;")
 
         self.layout.addWidget(self.action_drop, 1, 1, 1, 3)
         self.layout.addWidget(self.action_create, 1, 4, 1, 1)
