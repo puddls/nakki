@@ -10,6 +10,9 @@ class LinuxController(SystemController):
     def __init__(self):
         print('linux')
 
+    def open(self, application):
+        run(application[1])
+
     def close(self, application):
         print(f'closing {application} on linux')
 
@@ -23,6 +26,7 @@ class LinuxController(SystemController):
             except FileNotFoundError:
                 pass
         return set(filter(None, map(parse_desktop_entry, desktop_entries)))
+
 
 def run(command):
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
