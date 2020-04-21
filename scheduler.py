@@ -232,14 +232,13 @@ class Job(object):
     def run(self):
         """Run the job and immediately reschedule it."""
         logger.info('Running job %s', self)
-        self.job_func()
+        # Modified from original code to thread each job call
+        threading.Thread(target=self.job_func).start()
         self.last_run = datetime.datetime.now()
         self._schedule_next_run()
 
     def _schedule_next_run(self):
         """Compute the instant when this job should run next."""
-        # Allow *, ** magic temporarily:
-        # pylint: disable=W0142
         assert self.unit in ('seconds', 'minutes', 'hours', 'days', 'weeks')
         self.period = datetime.timedelta(**{self.unit: self.interval})
         self.next_run = datetime.datetime.now() + self.period
