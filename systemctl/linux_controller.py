@@ -4,8 +4,9 @@ import re
 
 from getpass import getuser
 
+from systemctl.system_controller import SystemController
 
-class LinuxController:
+class LinuxController(SystemController):
     def __init__(self):
         print('linux')
 
@@ -22,8 +23,6 @@ class LinuxController:
             except FileNotFoundError:
                 pass
         return set(filter(None, map(parse_desktop_entry, desktop_entries)))
-
-
 
 def run(command):
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

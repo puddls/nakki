@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame, QGridLayout, QLab
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtCore import Qt, pyqtSignal
 
-from systemctl.system_controller import systemController
+from systemctl.controller_factory import systemController
 
 class MainWindow(QFrame):
 
