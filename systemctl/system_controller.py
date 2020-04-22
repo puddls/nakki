@@ -4,14 +4,23 @@ from scheduler import Scheduler
 class SystemController:
     def __init__(self):
         self.schedule_manager = Scheduler()
-        self.schedule_manager.run_continuously()
+        self.cease_continuous_run = self.schedule_manager.run_continuously()
+
+    def pause_all_tasks(self):
+        self.cease_continuous_run.set()
+
+    def resume_all_tasks(self):
+        self.cease_continuous_run = self.schedule_manager.run_continuously()
+
+    def clear_tasks(self):
+        self.schedule_manager.clear()
 
     def open(self, application):
         print(f'open {application}')
 
     def close(self, application):
         print(f'close {application}')
-    
+
     def get_applications(self):
         return {('Discord', 'discord'), ('Spotify', 'spotify')}
 

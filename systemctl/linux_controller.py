@@ -12,7 +12,7 @@ class LinuxController(SystemController):
         print('linux')
 
     def open(self, application):
-        run(application[1])
+        launch(application[1])
 
     def close(self, application):
         print(f'closing {application} on linux')
@@ -27,7 +27,7 @@ class LinuxController(SystemController):
             except FileNotFoundError:
                 pass
         return set(filter(None, map(parse_desktop_entry, desktop_entries)))
-    
+
     def schedule_task(self, action, target, trigger):
         # Try the generic, platform independent triggers
         spr = super().schedule_task(action, target, trigger)
