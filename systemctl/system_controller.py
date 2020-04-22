@@ -1,4 +1,11 @@
+from scheduler import Scheduler
+
+
 class SystemController:
+    def __init__(self):
+        self.schedule_manager = Scheduler()
+        self.schedule_manager.run_continuously()
+
     def open(self, application):
         print(f'open {application}')
 
@@ -10,8 +17,17 @@ class SystemController:
 
     def schedule_task(self, action, target, trigger):
         print(f'schedule: {action} {target} when: {trigger}')
-        print('scheduling not implemented, executing now')
-        self.exec_task(action, target)
+        if trigger[0] == 'daily':
+            try:
+                self.schedule_manager.every(1).day \
+                                     .at(trigger[1]) \
+                                     .do(lambda: self.exec_task(action, target))
+                return True
+            except AssertionError:
+                print('invalid time')
+                return False
+        else:
+            return None
 
     def exec_task(self, action, target):
         if action == 'open':
@@ -19,4 +35,5 @@ class SystemController:
         elif action == 'close':
             self.close(target)
         else:
-            return False
+            return None
+        return True

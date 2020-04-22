@@ -8,6 +8,7 @@ from systemctl.system_controller import SystemController
 
 class LinuxController(SystemController):
     def __init__(self):
+        super().__init__()
         print('linux')
 
     def open(self, application):
@@ -26,6 +27,28 @@ class LinuxController(SystemController):
             except FileNotFoundError:
                 pass
         return set(filter(None, map(parse_desktop_entry, desktop_entries)))
+    
+    def schedule_task(self, action, target, trigger):
+        # Try the generic, platform independent triggers
+        spr = super().schedule_task(action, target, trigger)
+        # If it wasn't one of those, try platform dependant triggers
+        if spr is None:
+            pass
+            # if trigger[0] == 'some trigger that only works on linux':
+            #     schedule task with this trigger
+        return False
+
+    def exec_task(self, action, target):
+        spr = super().exec_task(action, target)
+        if spr is None:
+            pass
+            # if action == 'some action that only works on linux':
+            #     execute action
+        return False
+
+
+def launch(application):
+    os.system(application)
 
 
 def run(command):
