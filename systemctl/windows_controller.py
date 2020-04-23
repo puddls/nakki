@@ -1,9 +1,7 @@
-class WindowsController:
+from systemctl.system_controller import SystemController
+
+
+class WindowsController(SystemController):
     def __init__(self):
+        super().__init__()
         print('windows')
-
-    def close(self, application):
-        print(f'closing {application} on windows')
-
-    def get_applications(self):
-        return {('Discord', 'discord'), ('Spotify', 'spotify')}

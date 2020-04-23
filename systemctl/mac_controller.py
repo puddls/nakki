@@ -1,9 +1,7 @@
-class MacController:
+from systemctl.system_controller import SystemController
+
+
+class MacController(SystemController):
     def __init__(self):
+        super().__init__()
         print('mac')
-
-    def close(self, application):
-        print(f'closing {application} on mac')
-
-    def get_applications(self):
-        return {('Discord', 'discord'), ('Spotify', 'spotify')}
