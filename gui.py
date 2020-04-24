@@ -1,8 +1,13 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame, QGridLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, QLineEdit, QComboBox, QTabWidget, QScrollArea
+from random import randint
+
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QFrame, QGridLayout, QLabel,
+                             QPushButton, QListWidget, QListWidgetItem, QLineEdit, QComboBox,
+                             QTabWidget, QScrollArea, QSizePolicy)
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtCore import Qt, pyqtSignal
 
 from systemctl.controller_factory import systemController
+
 
 class MainWindow(QFrame):
 
@@ -50,16 +55,17 @@ class CreateTaskPage(QFrame):
         print("no work")
 
     def create_action_block(self):
-        new = ActionWidget(self.buttons.action_drop.currentData())
-        self.creation_box.layout.addWidget(new)
+        actionW = ActionWidget(self.buttons.action_drop.currentData())
+        self.creation_box.add_construction_label(actionW)
 
     def create_object_block(self):
-        new = ObjectWidget(self.buttons.object_drop.currentData())
-        self.creation_box.layout.addWidget(new)
+        objectW = ObjectWidget(self.buttons.object_drop.currentData())
+        self.creation_box.add_construction_label(objectW)
 
     def create_cond_block(self):
-        new = CondWidget(self.buttons.cond_drop.currentData())
-        self.creation_box.layout.addWidget(new)
+        condW = CondWidget(self.buttons.cond_drop.currentData())
+        self.creation_box.layout.addWidget(condW
+        )
 
 class ConstructionButtons(QFrame):
     def __init__(self):
@@ -102,6 +108,8 @@ class ConstructionButtons(QFrame):
 
 
 class CreationZone(QScrollArea):
+    GRID_WIDTH = 100
+    GRID_HEIGHT = 100
     def __init__(self):
         super().__init__()
 
@@ -109,35 +117,33 @@ class CreationZone(QScrollArea):
         self.layout.setAlignment(Qt.AlignTop)
         self.setLayout(self.layout)
 
-class ActionWidget(QFrame):
+    def add_construction_label(self, construction_label):
+        x = randint(0, self.GRID_WIDTH)
+        y = randint(0, self.GRID_HEIGHT)
+        self.layout.addWidget(construction_label, x, y)
+
+class ConstructionLabel(QLabel):
     def __init__(self, name):
-        super().__init__()
-        self.layout = QGridLayout()
-        label = QLabel(name)
+        super().__init__(name)
+        self.setFrameStyle(QFrame.Box | QFrame.Raised)
+        # this is a beyond dirty hack but I couldn't get it to size properly
+        # horizontally with size policies alone
+        self.setFixedWidth(100)
+        self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
-        self.layout.addWidget(label)
-        self.setLayout(self.layout)
 
-
-class ObjectWidget(QFrame):
+class ActionWidget(ConstructionLabel):
     def __init__(self, name):
-        super().__init__()
+        super().__init__(name)
 
-        self.layout = QGridLayout()
-        label = QLabel(name)
-
-        self.layout.addWidget(label)
-        self.setLayout(self.layout)
-
-class CondWidget(QFrame):
+class ObjectWidget(ConstructionLabel):
     def __init__(self, name):
-        super().__init__()
+        super().__init__(name)
 
-        self.layout = QGridLayout()
-        label = QLabel(name)
+class CondWidget(ConstructionLabel):
+    def __init__(self, name):
+        super().__init__(name)
 
-        self.layout.addWidget(label)
-        self.setLayout(self.layout)
 
 class Settings(QFrame):
     def __init__(self):
