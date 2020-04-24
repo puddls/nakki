@@ -3,8 +3,8 @@ from random import randint
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QFrame, QGridLayout, QLabel,
                              QPushButton, QListWidget, QListWidgetItem, QLineEdit, QComboBox,
                              QTabWidget, QScrollArea, QSizePolicy)
-from PyQt5.QtGui import QPalette, QColor
-from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtGui import QPalette, QColor, QDrag
+from PyQt5.QtCore import Qt, pyqtSignal, QMimeData
 
 from systemctl.controller_factory import systemController
 
@@ -133,11 +133,23 @@ class CreationZone(QScrollArea):
 class ConstructionLabel(QLabel):
     def __init__(self, name):
         super().__init__(name)
+        self.name = name
         self.setFrameStyle(QFrame.Box | QFrame.Raised)
         # this is a beyond dirty hack but I couldn't get it to size properly
         # horizontally with size policies alone
         self.setFixedWidth(100)
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+
+    def mouseMoveEvent(self, event):
+        drag = QDrag(self)
+        # this gives an empty pixmap (not what we want). Not sure how to fix -
+        # we might need an encompassing widget around the label instead
+        # of just grabbing the label itself.
+        pixmap = self.grab()
+        # empty for now
+        mime_data = QMimeData()
+        drag.setMimeData(mime_data)
+        drag.exec()
 
 
 class ActionWidget(ConstructionLabel):
