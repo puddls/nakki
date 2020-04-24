@@ -120,6 +120,14 @@ class CreationZone(QScrollArea):
     def add_construction_label(self, construction_label):
         x = randint(0, self.GRID_WIDTH)
         y = randint(0, self.GRID_HEIGHT)
+        # TODO
+        # ideas:
+        # prefill every 100x100 slot with a blank widget (spacer maybe?)
+        # then just replace the widget at that xy with the construction label
+        # instead of adding it.
+        # could run into issues because the labels have a larger span than just
+        # 1 grid spot
+
         self.layout.addWidget(construction_label, x, y)
 
 class ConstructionLabel(QLabel):
