@@ -142,10 +142,9 @@ class ConstructionLabel(QLabel):
 
     def mouseMoveEvent(self, event):
         drag = QDrag(self)
-        # this gives an empty pixmap (not what we want). Not sure how to fix -
-        # we might need an encompassing widget around the label instead
-        # of just grabbing the label itself.
+        # make the drag look like our widget
         pixmap = self.grab()
+        drag.setPixmap(pixmap)
         # empty for now
         mime_data = QMimeData()
         drag.setMimeData(mime_data)
@@ -172,7 +171,7 @@ class ActionWidget(ConstructionLabel):
 class ObjectWidget(ConstructionLabel):
     def __init__(self, name):
         super().__init__(name)
-        
+
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(painter.Antialiasing)
@@ -189,7 +188,7 @@ class ObjectWidget(ConstructionLabel):
 class CondWidget(ConstructionLabel):
     def __init__(self, name):
         super().__init__(name)
-        
+
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(painter.Antialiasing)
