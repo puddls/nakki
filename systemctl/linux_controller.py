@@ -21,12 +21,17 @@ class LinuxController(SystemController):
         run(f'pkill {application[1]}')
 
     def get_user_ps(self):
+        ''' Finds processes owned by the user that aren't obviously system processes.
+        Returns a set of process names. '''
         ps = run(f'ps -eu {getuser()}')[0].decode().split('\n')
         ps_names = set((p.strip().split(' ')[-1] for p in ps))
         likely_ps = set((p for p in ps_names if '/' not in p))
         return likely_ps
 
     def get_applications(self):
+        ''' Finds installed applications (specifically those with a .desktop file,
+        the same set that would be found by a start menu)
+        Returns a set of tuples: {(application name, command to execute), ...} '''
         desktop_entries = set()
         for loc in ('/usr/share/applications/',
                     '/usr/local/share/applications/',
@@ -61,11 +66,15 @@ def launch(application):
 
 
 def run(command):
+    ''' Runs the command as though it were typed into a bash prompt
+    Returns a tuple of (stdout, stderr) in bytes '''
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return process.communicate()
 
 
 def continued_execute(cmd):
+    ''' Used for commands that numerous lines of output over time (e.g. 'udiskctl monitor')
+    Should be iterated through in a thread, it will yield each line of output when it gets it from stdout '''
     popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
     for stdout_line in iter(popen.stdout.readline, ""):
         yield stdout_line
@@ -76,11 +85,15 @@ def continued_execute(cmd):
 
 
 def parse_desktop_entry(file):
+    ''' Goes from a .desktop file to the usefull application info
+    Returns a tuple (application name, command to execute) '''
     if '.desktop' not in file:
         return None
     f = open(file).read()
+    # Ignore junk at the top
     start = re.search(r'\[Desktop Entry\]', f)
     if start:
+        # Find the end of the desktop entry (there could be other stuff, also marked by [name] ...)
         s = start.span()[1]
         end = re.search(r'\n\[.*\]', f[s:])
         if end:
@@ -90,6 +103,7 @@ def parse_desktop_entry(file):
         entry = f[s:e]
         name = None
         exec_ = None
+        # Find the name and exec, and make sure its actually an application
         for line in entry.split('\n'):
             if 'Name=' in line:
                 name = line.split('=')[1]
