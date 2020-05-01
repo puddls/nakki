@@ -3,8 +3,8 @@ from random import randint
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QFrame, QGridLayout, QLabel,
                              QPushButton, QListWidget, QListWidgetItem, QLineEdit, QComboBox,
                              QTabWidget, QScrollArea, QSizePolicy)
-from PyQt5.QtGui import QPalette, QColor, QDrag
-from PyQt5.QtCore import Qt, pyqtSignal, QMimeData
+from PyQt5.QtGui import QBrush, QColor, QDrag, QPainter, QPalette, QPen, QPolygon
+from PyQt5.QtCore import QMimeData, QPoint, Qt, pyqtSignal
 
 from systemctl.controller_factory import systemController
 
@@ -95,14 +95,14 @@ class ConstructionButtons(QFrame):
         self.cond_create = QPushButton("+")
         self.cond_create.setStyleSheet("padding: 3px;")
 
-        self.layout.addWidget(self.action_drop, 1, 1, 1, 3)
-        self.layout.addWidget(self.action_create, 1, 4, 1, 1)
+        self.layout.addWidget(self.cond_drop, 1, 1, 1, 3)
+        self.layout.addWidget(self.cond_create, 1, 4, 1, 1)
 
-        self.layout.addWidget(self.object_drop, 1, 5, 1, 3)
-        self.layout.addWidget(self.object_create, 1, 8, 1, 1)
+        self.layout.addWidget(self.action_drop, 1, 5, 1, 3)
+        self.layout.addWidget(self.action_create, 1, 8, 1, 1)
 
-        self.layout.addWidget(self.cond_drop, 1, 9, 1, 3)
-        self.layout.addWidget(self.cond_create, 1, 12, 1, 1)
+        self.layout.addWidget(self.object_drop, 1, 9, 1, 3)
+        self.layout.addWidget(self.object_create, 1, 12, 1, 1)
 
         self.setLayout(self.layout)
 
@@ -156,13 +156,51 @@ class ActionWidget(ConstructionLabel):
     def __init__(self, name):
         super().__init__(name)
 
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(painter.Antialiasing)
+        painter.setPen(QPen(QBrush(QColor("#000")), 1))
+        point1 = QPoint(0, 0)
+        point2 = QPoint(80, 0)
+        point3 = QPoint(92, 10)
+        point4 = QPoint(80, 20)
+        point5 = QPoint(0, 20)
+        point6 = QPoint(12, 10)
+        poly = QPolygon((point1, point2, point3, point4, point5, point6))
+        painter.drawPolygon(poly)
+
 class ObjectWidget(ConstructionLabel):
     def __init__(self, name):
         super().__init__(name)
+        
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(painter.Antialiasing)
+        painter.setPen(QPen(QBrush(QColor("#000")), 1))
+        point1 = QPoint(0, 0)
+        point2 = QPoint(80, 0)
+        point3 = QPoint(92, 10)
+        point4 = QPoint(80, 20)
+        point5 = QPoint(0, 20)
+        point6 = QPoint(12, 10)
+        poly = QPolygon((point1, point2, point3, point4, point5, point6))
+        painter.drawPolygon(poly)
 
 class CondWidget(ConstructionLabel):
     def __init__(self, name):
         super().__init__(name)
+        
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(painter.Antialiasing)
+        painter.setPen(QPen(QBrush(QColor("#000")), 1))
+        point1 = QPoint(0, 0)
+        point2 = QPoint(80, 0)
+        point3 = QPoint(92, 10)
+        point4 = QPoint(80, 20)
+        point5 = QPoint(0, 20)
+        poly = QPolygon((point1, point2, point3, point4, point5))
+        painter.drawPolygon(poly)
 
 
 class Settings(QFrame):
