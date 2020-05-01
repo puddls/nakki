@@ -3,7 +3,7 @@ from random import randint
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QFrame, QGridLayout, QLabel,
                              QPushButton, QListWidget, QListWidgetItem, QLineEdit, QComboBox,
                              QTabWidget, QScrollArea, QSizePolicy)
-from PyQt5.QtGui import QBrush, QColor, QDrag, QPainter, QPalette, QPen, QPolygon
+from PyQt5.QtGui import QBrush, QColor, QDrag, QPainter, QPalette, QPen, QPolygon, QRegion
 from PyQt5.QtCore import QMimeData, QPoint, Qt, pyqtSignal
 
 from systemctl.controller_factory import systemController
@@ -154,52 +154,58 @@ class ConstructionLabel(QLabel):
 class ActionWidget(ConstructionLabel):
     def __init__(self, name):
         super().__init__(name)
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(painter.Antialiasing)
-        painter.setPen(QPen(QBrush(QColor("#000")), 1))
         point1 = QPoint(0, 0)
         point2 = QPoint(80, 0)
         point3 = QPoint(92, 10)
         point4 = QPoint(80, 20)
         point5 = QPoint(0, 20)
         point6 = QPoint(12, 10)
-        poly = QPolygon((point1, point2, point3, point4, point5, point6))
-        painter.drawPolygon(poly)
+        self.poly = QPolygon((point1, point2, point3, point4, point5, point6))
+        region = QRegion(self.poly)
+        self.setMask(region)
+
+    def paintEvent(self, QPaintEvent):
+        painter = QPainter(self)
+        painter.setRenderHint(painter.Antialiasing)
+        painter.setPen(QPen(QBrush(QColor("#000")), 2))
+        painter.drawPolygon(self.poly)
 
 class ObjectWidget(ConstructionLabel):
     def __init__(self, name):
         super().__init__(name)
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(painter.Antialiasing)
-        painter.setPen(QPen(QBrush(QColor("#000")), 1))
         point1 = QPoint(0, 0)
         point2 = QPoint(80, 0)
         point3 = QPoint(92, 10)
         point4 = QPoint(80, 20)
         point5 = QPoint(0, 20)
         point6 = QPoint(12, 10)
-        poly = QPolygon((point1, point2, point3, point4, point5, point6))
-        painter.drawPolygon(poly)
-
-class CondWidget(ConstructionLabel):
-    def __init__(self, name):
-        super().__init__(name)
+        self.poly = QPolygon((point1, point2, point3, point4, point5, point6))
+        region = QRegion(self.poly)
+        self.setMask(region)
 
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(painter.Antialiasing)
-        painter.setPen(QPen(QBrush(QColor("#000")), 1))
+        painter.setPen(QPen(QBrush(QColor("#000")), 2))
+        painter.drawPolygon(self.poly)
+
+class CondWidget(ConstructionLabel):
+    def __init__(self, name):
+        super().__init__(name)
         point1 = QPoint(0, 0)
         point2 = QPoint(80, 0)
         point3 = QPoint(92, 10)
         point4 = QPoint(80, 20)
         point5 = QPoint(0, 20)
-        poly = QPolygon((point1, point2, point3, point4, point5))
-        painter.drawPolygon(poly)
+        self.poly = QPolygon((point1, point2, point3, point4, point5))
+        region = QRegion(self.poly)
+        self.setMask(region)
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(painter.Antialiasing)
+        painter.setPen(QPen(QBrush(QColor("#000")), 1))
+        painter.drawPolygon(self.poly)
 
 
 class Settings(QFrame):
