@@ -15,7 +15,9 @@ class LinuxController(SystemController):
         launch(application[1])
 
     def close(self, application):
-        print(f'closing {application} on linux')
+        # TODO: this requires it to match the process name, but that might not be the command to launch
+        # (e.g. google-chrome-stable vs chrome, discord vs Discord, )
+        run(f'pkill {application[1]}')
 
     def get_applications(self):
         desktop_entries = set()
