@@ -16,8 +16,15 @@ class LinuxController(SystemController):
 
     def close(self, application):
         # TODO: this requires it to match the process name, but that might not be the command to launch
-        # (e.g. google-chrome-stable vs chrome, discord vs Discord, )
+        # (e.g. google-chrome-stable vs chrome, discord vs Discord, etc)
+        # maybe use get_user_ps somehow? ask the user to open the app and then select it from that list?
         run(f'pkill {application[1]}')
+
+    def get_user_ps(self):
+        ps = run(f'ps -eu {getuser()}')[0].decode().split('\n')
+        ps_names = set((p.strip().split(' ')[-1] for p in ps))
+        likely_ps = set((p for p in ps_names if '/' not in p))
+        return likely_ps
 
     def get_applications(self):
         desktop_entries = set()
