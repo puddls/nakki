@@ -35,10 +35,18 @@ class SystemController:
             except AssertionError:
                 print('invalid time')
                 return False
+        elif trigger[0] == 'periodic_min':
+            if int(trigger[1]) != trigger[1]:
+                print('invalid time')
+                return False
+            self.schedule_manager.every(trigger[1]).minutes \
+                                    .do(lambda: self.exec_task(action, target))
+            return True
         else:
             return None
 
     def exec_task(self, action, target):
+        print(f'executing {action} on {target}')
         if action == 'open':
             self.open(target)
         elif action == 'close':
