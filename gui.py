@@ -112,7 +112,7 @@ class CreationZone(QScrollArea):
     GRID_HEIGHT = 100
     def __init__(self):
         super().__init__()
-
+        self.setAcceptDrops(True)
         self.layout = QGridLayout()
         self.layout.setAlignment(Qt.AlignTop)
         self.setLayout(self.layout)
@@ -129,6 +129,18 @@ class CreationZone(QScrollArea):
         # 1 grid spot
 
         self.layout.addWidget(construction_label, x, y)
+
+    def dragEnterEvent(self, event):
+        # need to accept the event so qt gives us the DropEvent
+        # https://doc.qt.io/qt-5/qdropevent.html#details
+        event.acceptProposedAction()
+
+    def dropEvent(self, event):
+        mimedata = event.mimeData()
+        event.acceptProposedAction()
+        print("dropped")
+        # TODO
+        # @ kate - work your magic!
 
 class ConstructionLabel(QLabel):
     def __init__(self, name):
