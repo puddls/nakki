@@ -21,6 +21,12 @@ class SystemController:
     def close(self, application):
         print(f'close {application}')
 
+    def get_actions(self):
+        return {'open', 'close'}
+    
+    def get_triggers(self):
+        return {'daily','periodic_min'}
+
     def get_applications(self):
         ''' Return a list of installed applications as a set of tuples
         in the format: {(application name, command to execute)}'''

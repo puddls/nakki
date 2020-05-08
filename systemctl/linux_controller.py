@@ -21,6 +21,12 @@ class LinuxController(SystemController):
         # maybe use get_user_ps somehow? ask the user to open the app and then select it from that list?
         run(f'pkill {application[1]}')
 
+    def get_actions(self):
+        return super().get_actions().union({'command'})
+    
+    def get_triggers(self):
+        return super().get_triggers().union({'removable drive'})
+
     def get_user_ps(self):
         ''' Finds processes owned by the user that aren't obviously system processes.
         Returns a set of process names. '''
