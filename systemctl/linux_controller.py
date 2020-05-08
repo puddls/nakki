@@ -1,6 +1,7 @@
 import os
 import subprocess
 import re
+from threading import Thread
 
 from getpass import getuser
 
@@ -47,9 +48,8 @@ class LinuxController(SystemController):
         spr = super().schedule_task(action, target, trigger)
         # If it wasn't one of those, try platform dependant triggers
         if spr is None:
-            pass
-            # if trigger[0] == 'some trigger that only works on linux':
-            #     schedule task with this trigger
+            if trigger[0] == 'removable drive':
+                Thread(target=lambda: self.udisk_monitor(action, target, trigger[1])).start()
         return False
 
     def exec_task(self, action, target):
@@ -57,7 +57,16 @@ class LinuxController(SystemController):
         if spr is None:
             if action == 'command':
                 run(target)
+                return True
         return False
+
+    def udisk_monitor(self, action, target, trigger):
+        # TODO: don't triple execute (multiple added/removed lines for each drive)
+        # TODO: integrate with other stuff so there can't ever be multiple of these running
+        for line in continued_execute('udisksctl monitor'):
+            if trigger == 'inserted' and 'Added' in line or \
+               trigger == 'removed' and 'Removed' in line:
+                self.exec_task(action, target)
 
 
 def launch(application):
@@ -74,7 +83,7 @@ def run(command):
 def continued_execute(cmd):
     ''' Used for commands that numerous lines of output over time (e.g. 'udiskctl monitor')
     Should be iterated through in a thread, it will yield each line of output when it gets it from stdout '''
-    popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+    popen = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, universal_newlines=True)
     for stdout_line in iter(popen.stdout.readline, ""):
         yield stdout_line
     popen.stdout.close()
