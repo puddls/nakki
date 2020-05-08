@@ -52,7 +52,6 @@ class CreateTaskPage(QFrame):
         self.setLayout(self.layout)
 
     def save_task(self):
-        systemController.schedule_task('command','playerctl play-pause',('removable drive','inserted'))
         print("no work")
 
     def create_action_block(self):
