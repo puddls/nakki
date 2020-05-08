@@ -55,9 +55,8 @@ class LinuxController(SystemController):
     def exec_task(self, action, target):
         spr = super().exec_task(action, target)
         if spr is None:
-            pass
-            # if action == 'some action that only works on linux':
-            #     execute action
+            if action == 'command':
+                run(target)
         return False
 
 
