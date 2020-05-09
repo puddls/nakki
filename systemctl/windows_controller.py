@@ -5,6 +5,10 @@ from itertools import count
 
 from systemctl.system_controller import SystemController
 
+import win32com.client as win32
+
+import ctypes
+
 class WindowsController(SystemController):
     def __init__(self):
         super().__init__()
@@ -117,3 +121,15 @@ def is_product_installed_uid(uid):
         return False
     else:
         return True
+
+    def lock():
+    	ctypes.windll.user32.LockWorkStation ()
+
+    def opennew(self, application):
+    	win32com.client.DispatchEx(application)
+
+    def open(self, application):
+    	win32com.client.Dispatch(application)
+
+
+
