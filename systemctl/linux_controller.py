@@ -67,12 +67,17 @@ class LinuxController(SystemController):
         return False
 
     def udisk_monitor(self, action, target, trigger):
-        # TODO: don't triple execute (multiple added/removed lines for each drive)
         # TODO: integrate with other stuff so there can't ever be multiple of these running
+        change = False
         for line in continued_execute('udisksctl monitor'):
-            if trigger == 'inserted' and 'Added' in line or \
-               trigger == 'removed' and 'Removed' in line:
-                self.exec_task(action, target)
+            if change:
+                if 'Drive' in line:
+                    Thread(target=lambda: self.exec_task(action, target)).start()
+                change = False
+            if trigger == 'inserted' and 'Added' in line:
+                change = True
+            if trigger == 'removed' and 'Removed /org/freedesktop/UDisks2/drives' in line:
+                Thread(target=lambda: self.exec_task(action, target)).start()
 
 
 def launch(application):
