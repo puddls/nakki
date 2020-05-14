@@ -13,19 +13,19 @@ class LinuxController(SystemController):
         print('linux')
 
     def open(self, application):
-        launch(application[1])
+        launch(application)
 
     def close(self, application):
         # TODO: this requires it to match the process name, but that might not be the command to launch
         # (e.g. google-chrome-stable vs chrome, discord vs Discord, etc)
         # maybe use get_user_ps somehow? ask the user to open the app and then select it from that list?
-        run(f'pkill {application[1]}')
+        run(f'pkill {application}')
 
     def get_actions(self):
         return super().get_actions().union({('Custom command','command')})
     
     def get_triggers(self):
-        return super().get_triggers().union({('Removable drive','rem_drive')})
+        return super().get_triggers().union({('Removable drive', 'rem_drive')})
 
     def get_user_ps(self):
         ''' Finds processes owned by the user that aren't obviously system processes.

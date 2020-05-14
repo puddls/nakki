@@ -52,7 +52,13 @@ class CreateTaskPage(QFrame):
         self.setLayout(self.layout)
 
     def save_task(self):
-        print("no work")
+        # TODO: get these values from the drag and drop things, not the combo boxes
+        # TODO: have a way to input the value of the trigger (e.g. 15:30, 20, removed, etc.).
+        #   Avalible options depend on the trigger selected.
+        trigger_value = input(f'Value for \'{self.buttons.cond_drop.currentData()}\' trigger: ')
+        systemController.schedule_task(self.buttons.action_drop.currentData(),
+                                       self.buttons.object_drop.currentData(),
+                                       (self.buttons.cond_drop.currentData(), trigger_value))
 
     def create_action_block(self):
         actionW = ActionWidget(self.buttons.action_drop.currentData())
@@ -83,7 +89,7 @@ class ConstructionButtons(QFrame):
         apps = systemController.get_applications()
         if apps:
             for application in apps:
-                self.object_drop.addItem(application[0], application[0])
+                self.object_drop.addItem(*application)
         else:
             self.object_drop.addItem("No apps found", "No apps found")
         self.object_create = QPushButton("+")

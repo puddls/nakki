@@ -37,8 +37,7 @@ class SystemController:
         action: what is being done, e.g. 'open' or 'close'.
             Avalible actions types can be found in exec_task, additional options
             may be avalible in the OS specific implementation
-        target: thing to action on, in the format (human friendly name, computer friendly name)
-            Example: ('Chrome Browser', 'google-chrome-stable')
+        target: thing to action on (e.g. 'google-chrome-stable', 'spotify', etc.)
         trigger: tuple specifying when to execute, in the form (type, value).
             Example: ('daily', '14:30') will run every day at 2:30 PM.
             Avalible trigger types can be found in this function, more may be
