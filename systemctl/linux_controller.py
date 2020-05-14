@@ -22,10 +22,10 @@ class LinuxController(SystemController):
         run(f'pkill {application[1]}')
 
     def get_actions(self):
-        return super().get_actions().union({'command'})
+        return super().get_actions().union({('Custom command','command')})
     
     def get_triggers(self):
-        return super().get_triggers().union({'removable drive'})
+        return super().get_triggers().union({('Removable drive','rem_drive')})
 
     def get_user_ps(self):
         ''' Finds processes owned by the user that aren't obviously system processes.
@@ -54,7 +54,7 @@ class LinuxController(SystemController):
         spr = super().schedule_task(action, target, trigger)
         # If it wasn't one of those, try platform dependant triggers
         if spr is None:
-            if trigger[0] == 'removable drive':
+            if trigger[0] == 'rem_drive':
                 Thread(target=lambda: self.udisk_monitor(action, target, trigger[1])).start()
         return False
 

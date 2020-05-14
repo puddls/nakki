@@ -74,8 +74,8 @@ class ConstructionButtons(QFrame):
         self.layout = QGridLayout()
 
         self.action_drop = QComboBox()
-        self.action_drop.addItem("Close", "Close")
-        self.action_drop.addItem("Open", "Open")
+        for action in systemController.get_actions():
+            self.action_drop.addItem(*action)
         self.action_create = QPushButton("+")
         self.action_create.setStyleSheet("padding: 3px;")
 
@@ -90,8 +90,8 @@ class ConstructionButtons(QFrame):
         self.object_create.setStyleSheet("padding: 3px;")
 
         self.cond_drop = QComboBox()
-        self.cond_drop.addItem("9 AM", "9 AM")
-        self.cond_drop.addItem("2 PM", "2 PM")
+        for trigger in systemController.get_triggers():
+            self.cond_drop.addItem(*trigger)
         self.cond_create = QPushButton("+")
         self.cond_create.setStyleSheet("padding: 3px;")
 
