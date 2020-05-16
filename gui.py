@@ -16,10 +16,12 @@ class MainWindow(QFrame):
 
         settings = Settings()
         create_page = CreateTaskPage()
+        self.cur_tasks = CurrentTasks()
 
         self.tabs = QTabWidget()
         self.tabs.addTab(create_page, "Actions")
         self.tabs.addTab(settings, "Settings")
+        self.tabs.addTab(cur_tasks, "Tasks")
         # Need to implement task list class
 
         self.layout = QGridLayout()
@@ -229,6 +231,14 @@ class CondWidget(ConstructionLabel):
         painter.setPen(QPen(QBrush(QColor("#000")), 1))
         painter.drawPolygon(self.poly)
 
+class CurrentTasks(QFrame):
+    def __init__(self, parent=None, flags=Qt.WindowFlags()):
+        super().__init__(parent=parent, flags=flags)
+
+        self.task_list = QListWidget()
+
+    def add_saved_task(self, cond, trigger, target, action):
+        self.task_list.addItem(QListWidgetItem(f'{action} {target} when: {cond} {trigger}'))
 
 class Settings(QFrame):
     def __init__(self):
