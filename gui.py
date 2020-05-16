@@ -41,12 +41,16 @@ class CreateTaskPage(QFrame):
         name_box = QLineEdit()
         name_box.setPlaceholderText("Enter the name of your task here.")
 
+        self.trigger_box = QLineEdit()
+        self.trigger_box.setPlaceholderText("Enter the trigger time here hh:mm 24 hr (temp!!!).")
+
         save = QPushButton("Save")
         save.clicked.connect(self.save_task)
 
         self.layout = QGridLayout()
         self.layout.addWidget(self.buttons)
         self.layout.addWidget(self.creation_box)
+        self.layout.addWidget(self.trigger_box)
         self.layout.addWidget(name_box)
         self.layout.addWidget(save)
         self.setLayout(self.layout)
@@ -55,7 +59,7 @@ class CreateTaskPage(QFrame):
         # TODO: get these values from the drag and drop things, not the combo boxes
         # TODO: have a way to input the value of the trigger (e.g. 15:30, 20, removed, etc.).
         #   Avalible options depend on the trigger selected.
-        trigger_value = input(f'Value for \'{self.buttons.cond_drop.currentData()}\' trigger: ')
+        trigger_value = self.trigger_box.text()
         systemController.schedule_task(self.buttons.action_drop.currentData(),
                                        self.buttons.object_drop.currentData(),
                                        (self.buttons.cond_drop.currentData(), trigger_value))
