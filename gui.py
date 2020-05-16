@@ -17,6 +17,7 @@ class MainWindow(QFrame):
         settings = Settings()
         create_page = CreateTaskPage()
         self.cur_tasks = CurrentTasks()
+        create_page.task_created.connect(self.cur_tasks.add_saved_task)
 
         self.tabs = QTabWidget()
         self.tabs.addTab(create_page, "Actions")
@@ -29,6 +30,9 @@ class MainWindow(QFrame):
         self.setLayout(self.layout)
 
 class CreateTaskPage(QFrame):
+
+    task_created = pyqtSignal(object, object, object, object) # cond, trigger, target, action
+    # @ kate replace object with the actual types
 
     def __init__(self):
         super().__init__()
@@ -65,6 +69,7 @@ class CreateTaskPage(QFrame):
         systemController.schedule_task(self.buttons.action_drop.currentData(),
                                        self.buttons.object_drop.currentData(),
                                        (self.buttons.cond_drop.currentData(), trigger_value))
+        self.task_created.emit(cond, trigger, target, action) # @ kate fix this
 
     def create_action_block(self):
         actionW = ActionWidget(self.buttons.action_drop.currentData())
