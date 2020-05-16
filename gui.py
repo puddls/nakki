@@ -1,10 +1,11 @@
 from random import randint
+import json
 
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QFrame, QGridLayout, QLabel,
                              QPushButton, QListWidget, QListWidgetItem, QLineEdit, QComboBox,
                              QTabWidget, QScrollArea, QSizePolicy)
 from PyQt5.QtGui import QBrush, QColor, QDrag, QPainter, QPalette, QPen, QPolygon, QRegion
-from PyQt5.QtCore import QMimeData, QPoint, Qt, pyqtSignal
+from PyQt5.QtCore import QMimeData, QPoint, Qt, pyqtSignal, QRect
 
 from systemctl.controller_factory import systemController
 
@@ -124,6 +125,9 @@ class CreationZone(QScrollArea):
     GRID_HEIGHT = 100
     def __init__(self):
         super().__init__()
+        # proper way would be to have ConstructionLabel emit a signal when a
+        # drag is initiated, but, lazy
+        self.most_recently_dropped = None
         self.setAcceptDrops(True)
         self.layout = QGridLayout()
         self.layout.setAlignment(Qt.AlignTop)
@@ -139,8 +143,10 @@ class CreationZone(QScrollArea):
         # instead of adding it.
         # could run into issues because the labels have a larger span than just
         # 1 grid spot
-
+        construction_label.x = x
+        construction_label.y = y
         self.layout.addWidget(construction_label, x, y)
+
 
     def dragEnterEvent(self, event):
         # need to accept the event so qt gives us the DropEvent
@@ -148,16 +154,64 @@ class CreationZone(QScrollArea):
         event.acceptProposedAction()
 
     def dropEvent(self, event):
-        mimedata = event.mimeData()
         event.acceptProposedAction()
-        print("dropped")
-        # TODO
-        # @ kate - work your magic!
+
+        # jankiest way ever to get the widget that was dropped
+        data = json.loads(event.mimeData().data("application/x-nakki-construction-label").data())
+        x = data[0]
+        y = data[1]
+
+        dropped_qt_widget = None
+        dropped_widget = None
+        for i in range(self.layout.count()):
+            w = self.layout.itemAt(i)
+            if w.widget().x == x and w.widget().y == y:
+                dropped_qt_widget = w
+                dropped_widget = w.widget()
+                break
+
+        # use the dropped coordiantes for distance calc
+        x = event.pos().x()
+        y = event.pos().y()
+        # scale from pixels to our 100x100 grid
+        x = int((x / self.frameGeometry().width()) * self.GRID_WIDTH)
+        y = int((y / self.frameGeometry().height()) * self.GRID_HEIGHT)
+
+        # distance to widget
+        distances = {}
+        # find nearest widget and snap to it
+        for i in range(self.layout.count()):
+            w = self.layout.itemAt(i).widget()
+            if w == dropped_widget:
+                # dropped widget will obviously be closest to itself
+                continue
+            # euclidean distance
+            dist = ((w.x - x) ** 2 + (w.y - y) ** 2) ** (1/2)
+            distances[dist] = w
+        # if dropped widget is the only widget, ``min`` will error
+        if not distances:
+            return
+        distance = min(distances)
+        w = distances[distance]
+        self.layout.removeItem(dropped_qt_widget)
+
+        # I horrify even myself sometimes
+        to_add = type(w)(w.name)
+        to_add.x = w.x - 10
+        to_add.y = w.y
+        self.layout.addWidget(to_add, w.x - 10, w.y)
+
+
 
 class ConstructionLabel(QLabel):
+
     def __init__(self, name):
         super().__init__(name)
         self.name = name
+        # very dirty. These should be passed in init, but we create them
+        # before we add them to a layout
+        self.x = None
+        self.y = None
         self.setFrameStyle(QFrame.Box | QFrame.Raised)
         # this is a beyond dirty hack but I couldn't get it to size properly
         # horizontally with size policies alone
@@ -171,6 +225,8 @@ class ConstructionLabel(QLabel):
         drag.setPixmap(pixmap)
         # empty for now
         mime_data = QMimeData()
+        data = [self.x, self.y]
+        mime_data.setData("application/x-nakki-construction-label", bytes(json.dumps(data), "utf-8"))
         drag.setMimeData(mime_data)
         drag.exec()
 
