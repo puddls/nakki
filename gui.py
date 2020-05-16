@@ -21,7 +21,7 @@ class MainWindow(QFrame):
         self.tabs = QTabWidget()
         self.tabs.addTab(create_page, "Actions")
         self.tabs.addTab(settings, "Settings")
-        self.tabs.addTab(cur_tasks, "Tasks")
+        self.tabs.addTab(self.cur_tasks, "Tasks")
         # Need to implement task list class
 
         self.layout = QGridLayout()
